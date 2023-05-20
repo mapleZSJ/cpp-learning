@@ -1,5 +1,6 @@
 //函数中使用sizeof(arr) / sizeof(arr[0])求数组长度不正确
 
+//错误用法：
 template <typename T>
 int arrLen(T& arr){
     return sizeof(arr)/sizeof(arr[0]);
