@@ -49,4 +49,8 @@ int main()
     print(arr);
     print2(arr);
 }
+
+
+另：
+求数组长度：std::end(arr) - std::begin(arr);
 */
