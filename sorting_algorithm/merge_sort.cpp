@@ -18,7 +18,7 @@ public:
         printArr();
     }
 
-    //递归版
+    //递归(recursion)版
     void sort(int front, int end)
     {
         if (front >= end)
@@ -71,7 +71,7 @@ void printArr(T (&arr)[len]){
 }
 
 
-//迭代版
+//迭代(iteration)版
 template <typename T, int len>
 void mergeSortFunc(T (&arr)[len])
 {
