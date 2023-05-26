@@ -65,9 +65,9 @@ void radixSortFunc(T (&arr)[len])
         radix = radix*10;
     }
 
-    printArr(arr);
     delete []tmp;
     delete []count;
+    printArr(arr);
 }
 
 
