@@ -19,7 +19,7 @@ std::unique_lock.owns_lock返回当前是否持有锁。通常来说不应该在
 <br>
 
 
-## std::condition_variable
+## std::shared_mutex
 读写锁把对共享资源的访问者划分成读者和写者,读者只对共享资源进行读访问,写者则需要对共享资源进行写操作。C++17开始,标准库提供了shared_mutex类(在这之前,可以使用boost的shared_mutex类或系统
 相关api)。
 
