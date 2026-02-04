@@ -75,16 +75,16 @@ priority_queue<T>：封装了vector<T>容器的适配器类模板，定义在头
 
 
 
-tip：
+tip： <br>
 1、analyse std::vector<bool> design    <br>
+
+```
 source link --> https://zhuanlan.zhihu.com/p/376377479
 
 std::vector<bool>，是类 sd::vector<T,std::allocator<T>> 的部分特化，为了节省内存，内部实际上是按bit来表征bool类型。从底层实现来看，std::vector<bool> 可视为动态的std::bitset.
 
-
 _Bit_type:
 In C++ standard, GNU-STL use typedef to define unsigned long as _Bit_type. a _Bit_type has 64bit，can store 64 bool type variables.
-
 
 typedef unsigned long _Bit_type;  // _Bit_type
 enum
@@ -92,6 +92,7 @@ enum
   _S_word_bit = int(__CHAR_BIT__ * sizeof(_Bit_type)) // a _Bit_type can store _S_word_bit bits
 };
 
+```
 
 
 
