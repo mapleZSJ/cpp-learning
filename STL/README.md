@@ -1,77 +1,94 @@
 序列容器：   <br>
 array：静态数组，大小固定、无法动态扩散或收缩。   <br>
-&emsp;&emsp; 底层是数组，元素都存储在连续的内存空间中。   <br>
-&emsp;&emsp; std::array<int, 10> values {};   <br>
+* 底层是数组，元素都存储在连续的内存空间中。   <br>
+* #include <array>   <br>
+* std::array<int, 10> values {};   <br>
 
 vector：动态数组，动态调整所占用的内存空间。在尾部插入/删除，O(1)；在头部或中部插入/删除，O(n)。   <br>
-&emsp;&emsp; 底层是数组(线性表)，元素都存储在连续的内存空间中。   <br>
-&emsp;&emsp; std::vector<int> values;   <br>
-&emsp;&emsp; [*注：vector<bool>不是存储bool类型元素的vector容器]   <br>
+* 底层是数组(线性表)，元素都存储在连续的内存空间中。   <br>
+* #include <vector>   <br>
+* std::vector<int> values;   <br>
+* [*注：vector<bool>不是存储bool类型元素的vector容器]   <br>
 
 deque：是double-ended queue的缩写，又称双端队列容器。可以修改自身容量、大小，在头部或尾部插入/删除，O(1)；在中部插入/删除，O(n)。   <br>
-&emsp;&emsp; 底层是堆+指针，存储元素并不能保证所有元素都存储到连续的内存空间中。   <br>
-&emsp;&emsp; std::deque<int> values;   <br>
+* 底层是堆+指针，存储元素并不能保证所有元素都存储到连续的内存空间中。   <br>
+* #include <deque>   <br>
+* std::deque<int> values;   <br>
 
 list：双向链表容器，不能通过位置直接访问元素，需要遍历容器。在任何已知的位置插入/删除，O(1)；查找O(n)。   <br>
-&emsp;&emsp; 底层是双向链表，元素是分散存储在内存空间里。   <br>
-&emsp;&emsp; std::list<int> values;   <br>
+* 底层是双向链表，元素是分散存储在内存空间里。   <br>
+* #include <list>   <br>
+* std::list<int> values;   <br>
 
 forward_list：单链表容器，不能通过位置直接访问元素，需要遍历容器。在任何已知的位置插入/删除，O(1)；查找O(n)。   <br>
-&emsp;&emsp; 底层是单链表，元素是分散存储在内存空间里。   <br>
-&emsp;&emsp; std::forward_list<int> values;   <br>
+* 底层是单链表，元素是分散存储在内存空间里。   <br>
+* #include <forward_list>   <br>
+* std::forward_list<int> values;   <br>
 
 
 
 排序容器(关联式容器)：红黑树   键值对、根据键值的大小做升序排序，内存不连续；查找、插入、删除，O(1)。   <br>
 [注：pair类模版，定义在<utility>头文件中，创建键值对。  pair<std::string, std::string> pair1(key, value)]   <br>
+
 map：键是唯一的，不能重复。元素根据元素键的大小做升序排序（std::less<T>）。键值对一旦被存入容器中，键不能重复也不能修改。   <br>
-&emsp;&emsp; std::map<std::string, int> myMap{{"myMap1", 10}, {"myMap2", 20}};   <br>
+* #include <map>   <br>
+* std::map<std::string, int> myMap{{"myMap1", 10}, {"myMap2", 20}};   <br>
 
 multimap：与map相同，但是键可以重复。   <br>
-&emsp;&emsp; std::multimap<std::string, int> myMultimap{{"myMultimap1", 10}, {"myMultimap2", 20}};   <br>
+* #include <map>   <br>
+* std::multimap<std::string, int> myMultimap{{"myMultimap1", 10}, {"myMultimap2", 20}};   <br>
 
 set：各个元素键和值完全相同，各个元素的值不能重复，不能修改元素的值，元素根据元素键的大小做升序排序（std::less<T>）。只能用迭代器访问。   <br>
-&emsp;&emsp; std::set<std::string> mySet{"myset1", "myset2"};   <br>
-
+* #include <set>   <br>
+* std::set<std::string> mySet{"myset1", "myset2"};   <br>
 
 multiset：与set相同，但是值可以重复。   <br>
-&emsp;&emsp; std::multiset<std::string> myMultiset{"myMultiset1", "myMultiset2"};   <br>
+* #include <set>   <br>
+* std::multiset<std::string> myMultiset{"myMultiset1", "myMultiset2"};   <br>
 
 
 
 哈希容器(非关联式容器)：哈希表   无序键值对，擅长通过键查找对应的值，O(1)；而遍历容器中存储元素的效率不如关联式容器。  <br>
 [注：采用哈希表实现无序容器时，会将所有数据存储到一整块连续的内存空间中，当存储位置发生冲突时，解决方法选用的是链地址法(开链法)]   <br>
+
 unordered_map：无序，各个元素的键不能重复也不能修改。   <br>
-&emsp;&emsp; std::unordered_map<std::string, int> umap{{"umap1", 10}, {"umap2", 20}};   <br>
-&emsp;&emsp; [注：在操作容器的过程中，如添加键值对，一旦容器的负载因子超过最大负载因子(默认1.0)，容器就会适当增加桶(本质是链表)的数量(通常是翻一倍)，并自动执行rehash()，重新调整各个键值对的存储位置（这个过程又称"重哈希"）。此过程很可能会导致之前的迭代器失效，失效针对的是表示容器内某个范围的迭代器，不会影响指向单个键值对的迭代器。]   <br>
+* #include <unordered_map>   <br>
+* std::unordered_map<std::string, int> umap{{"umap1", 10}, {"umap2", 20}};   <br>
+* [注：在操作容器的过程中，如添加键值对，一旦容器的负载因子超过最大负载因子(默认1.0)，容器就会适当增加桶(本质是链表)的数量(通常是翻一倍)，并自动执行rehash()，重新调整各个键值对的存储位置（这个过程又称"重哈希"）。此过程很可能会导致之前的迭代器失效，失效针对的是表示容器内某个范围的迭代器，不会影响指向单个键值对的迭代器。]   <br>
 
 unordered_multimap：与unordered_map相同，但是允许存储多个键相同的键值对。   <br>
-&emsp;&emsp; std::unordered_multimap<std::string, int> ummap{{"ummap1", 10}, {"ummap2", 20}};   <br>
+* #include <unordered_map>   <br>
+* std::unordered_multimap<std::string, int> ummap{{"ummap1", 10}, {"ummap2", 20}};   <br>
 
 unordered_set：无序，各个元素键和值完全相同，各个元素的值不能重复，不能修改元素的值。   <br>
-&emsp;&emsp; std::unordered_set<std::string> uset{"uset1", "uset2"};   <br>
+* #include <unordered_set>   <br>
+* std::unordered_set<std::string> uset{"uset1", "uset2"};   <br>
 
 unordered_multiset：与unordered_set相同，允许存储值相同的元素，且这些元素会存储到哈希表中同一个桶(本质是链表)上。   <br>
-&emsp;&emsp; std::unordered_multiset<std::string> umset{"umset1", "umset2"};   <br>
+* #include <unordered_set>   <br>
+* std::unordered_multiset<std::string> umset{"umset1", "umset2"};   <br>
 
 
 
 容器适配器：封装了序列容器的类模板       <br>
-stack<T>：封装了deque<T>容器的适配器类模板，定义在头文件<stack>中，后入先出。   <br>
-&emsp;&emsp; [满足条件的基础容器有 vector、deque、list]   <br>
-&emsp;&emsp; std::stack<int> values{1, 2, 3};   <br>
-&emsp;&emsp; std:stack<int, std::list<int>> mystack;   <br>
+stack<T>：封装了deque<T>容器的适配器类模板，后入先出。   <br>
+* [满足条件的基础容器有 vector、deque、list]   <br>
+* #include <stack>   <br>
+* std::stack<int> values{1, 2, 3};   <br>
+* std:stack<int, std::list<int>> mystack;   <br>
 
-queue<T>：封装了deque<T>容器的适配器类模板，定义在头文件<queue>中，先入先出。   <br>
-&emsp;&emsp; [满足条件的基础容器有 deque、list]   <br>
-&emsp;&emsp; std::queue<int> values{1, 2, 3};   <br>
-&emsp;&emsp; std::queue<int, std::list<int>> myqueue;   <br>
+queue<T>：封装了deque<T>容器的适配器类模板，先入先出。   <br>
+* [满足条件的基础容器有 deque、list]   <br>
+* #include <queue>   <br>
+* std::queue<int> values{1, 2, 3};   <br>
+* std::queue<int, std::list<int>> myqueue;   <br>
 
-priority_queue<T>：封装了vector<T>容器的适配器类模板，定义在头文件<queue>中，默认实现是一个会对元素排序，保证最大元素总在队列最前面的队列。从一端进(队尾)，从另一端出(队头)，且每次只能访问位于队头的元素。在创建时制定了一种排序规则（std::less<T>），优先级最大的元素最先出队列。   <br>
-&emsp;&emsp; [注：为了保证每次从队头移除的都是当前优先级最高的元素，每当有新元素进入或从队头移除一个元素后，它都会根据既定的排序规则找到优先级最高的元素，并将其移动到队列的队头]   <br>
-&emsp;&emsp; [满足条件的基础容器有 vector、deque]；底层是堆结构   <br>
-&emsp;&emsp; std::priority_queue<int> values;   <br>
-&emsp;&emsp; std::priority_queue<int, std::deque<int>> mupqueue;   <br>
+priority_queue<T>：封装了vector<T>容器的适配器类模板，默认实现是一个会对元素排序，保证最大元素总在队列最前面的队列。从一端进(队尾)，从另一端出(队头)，且每次只能访问位于队头的元素。在创建时制定了一种排序规则（std::less<T>），优先级最大的元素最先出队列。   <br>
+* [注：为了保证每次从队头移除的都是当前优先级最高的元素，每当有新元素进入或从队头移除一个元素后，它都会根据既定的排序规则找到优先级最高的元素，并将其移动到队列的队头]   <br>
+* [满足条件的基础容器有 vector、deque]；底层是堆结构   <br>
+* #include <queue>   <br>
+* std::priority_queue<int> values;   <br>
+* std::priority_queue<int, std::deque<int>> mupqueue;   <br>
 
 
 <br/>
