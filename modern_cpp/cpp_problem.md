@@ -85,3 +85,101 @@ class C : public B, public A {...};
 将指针初始化为NULL，之后没有给它一个合理的值就开始使用指针；     
 没有初始化栈中的指针，指针的值一般会是随机数，之后就直接开始使用指针。    
 
+
+# 为何空类的大小不是零？
+
+```
+class Empty { };
+
+void f()
+{
+    Empty a, b;  //栈对象
+    if (&a == &b) cout << "impossible: report error to compiler supplier";  //false
+
+    Empty* p1 = new Empty;  //堆对象
+    Empty* p2 = new Empty;  //堆对象
+    if (p1 == p2) cout << "impossible: report error to compiler supplier";  //false
+}
+```
+
+不同对象（哪怕是空类）也必须拥有不同的地址。即使类是空的，C++ 也会保证 sizeof(Empty) >= 1，从而对象在内存中至少占 1 个字节，便于区分地址。
+
+
+# C++中为何没有虚拟构造函数？
+
+虚拟机制的设计目的是，使程序员在不完全了解细节的情况下也能使用对象。但是，要建立一个对象，不能只知道“这大体上是什么”——你必须完全了解全部细节，清楚地知道你要建立的对象究竟是什么。所以，构造函数当然不能是虚的了。
+
+不过有时在建立对象时也需要一定的间接性，这就需要用点技巧来实现了。这样的技巧有时也被称作“虚拟构造函数”。举个使用抽象类来“虚拟构造对象”的例子：
+```
+struct F {         // interface to object creation functions
+    virtual A* make_an_A() const = 0;
+    virtual B* make_a_B() const = 0;
+};
+
+void user(const F& fac)
+{
+    A* p = fac.make_an_A();  // make an A of the appropriate type
+    B* q = fac.make_a_B();   // make a B of the appropriate type
+    // ...
+}
+
+struct FX : F {
+    A* make_an_A() const { return new AX(); }  // AX is derived from A
+    B* make_a_B() const { return new BX(); }   // BX is derived from B
+};
+
+struct FY : F {
+    A* make_an_A() const { return new AY(); }  // AY is derived from A
+    B* make_a_B() const { return new BY(); }   // BY is derived from B
+};
+
+int main()
+{
+    user(FX());  // this user makes AXs and BXs
+    user(FY());  // this user makes AYs and BYs
+    // ...
+}
+```
+上述代码其实运用了Factory模式的一个变体。关键之处是，user()被完全孤立开了——它对AX，AY这些类一无所知。
+
+
+# 为何无法在派生类中重载？
+```
+#include <iostream>
+
+class B {
+    public:
+        int f(int i) { cout << "f(int): "; return i+1; }
+}
+
+class D : public B {
+    public:
+        double f(double d) { cout << "f(double): "; return d+1.3; }
+}
+
+int main()
+{
+    D* pd = new D;
+
+    cout << pd->f(2) << '\n';  // f(double): 3.3
+    cout << pd->f(2.3) << '\n';  // f(double): 3.6
+}
+```
+在D和B之间没有重载发生。当调用pd->f()时，编译器就在D的名字域里找啊找，找到double f(double)后就调用它了。编译器懒得再到B的名字域里去看看有没有哪个函数更符合要求。记住，在C++中，没有跨域重载——继承类和基类虽然关系很亲密，但也不能坏了这条规矩。
+
+不过，如果非要跨域重载，可以使用 using 声明 把函数弄到同一个域里：
+```
+class D : public B {
+    public:
+        using B::f;  // make every f from B available
+        double f(double d) { cout << "f(double): "; return d+1.3; }
+        // ...
+};
+
+这样，结果就是：
+f(int): 3
+f(double): 3.6
+```
+因为D中的那句 using B::f 明确告诉编译器，要把B域中的f引入当前域。
+
+
